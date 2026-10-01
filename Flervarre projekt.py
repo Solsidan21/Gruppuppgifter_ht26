@@ -31,7 +31,7 @@ fig2, ax2 = plt.subplots()
 # y = np.linspace(-2,0,1000)
 # X, Y = np.meshgrid(x,y)
 # z = (np.sin(X + X*Y) - X - X*Y)/((X*(Y+1))**3)
-# n = 20
+# n = 10
 
 # The functions in (2)
 
