@@ -57,6 +57,7 @@ for k in range(len(datasets)):
     plt.legend()
     save_figure("task1_fit_" + name)
     plt.show()
+    plt.close()
 
     # Task 1.5, 1.6, 1.8 and 1.9
     P = A @ np.linalg.solve(A.T @ A, A.T)
@@ -80,6 +81,7 @@ for k in range(len(datasets)):
     plt.legend()
     save_figure("task1_projection_" + name)
     plt.show()
+    plt.close()
 
     # Task 1.3
     a = np.linspace(solution[0] - 1, solution[0] + 1, 200)
@@ -100,6 +102,7 @@ for k in range(len(datasets)):
     ax.set_zlabel("error")
     save_figure("task1_error_surface_" + name)
     plt.show()
+    plt.close()
 
 
 # Task 2
@@ -291,3 +294,4 @@ for i in range(len(z0_list)):
     plt.legend()
     save_figure("task2_iterations_" + str(i + 1))
     plt.show()
+    plt.close()
