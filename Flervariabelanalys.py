@@ -1,18 +1,10 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Sep 23 22:00:19 2026
-
-@author: Bruno
-"""
-
-import matplotlib.pyplot as plt
 import numpy as np
 from math import pi
 
 
 b = (pi)/4
 a = (pi)/4
-h = 10**(-5)
+h = 10**(-5) #when you change h closer to 0 the approximation gets better
     
 
 def f(a,b):
@@ -24,20 +16,23 @@ def df(a,b):
 def hf(a,b):
     return np.array([[-np.sin(a+b),-np.sin(a+b)],[-np.sin(a+b),-np.sin(a+b)]])
 
+#Implementation of a function that approximates the gradient
 def gradient(f):
     return np.array([(f(a + h, b) - f(a, b)) / h,(f(a, b + h) - f(a, b)) / h])
 
-
+#Implementation of a function that approximates the hessian
 def Hessian(f):
     return np.array([ [(f(a+2*h,b) - 2*f(a+h,b) + f(a,b)) / h**2,(f(a+h,b+h) - f(a+h,b) - f(a,b+h) + f(a,b)) / h**2],
                     [(f(a+h,b+h) - f(a+h,b) - f(a,b+h) + f(a,b)) / h**2,(f(a,b+2*h) - 2*f(a,b+h) + f(a,b)) / h**2]])
 
-print(gradient(f))
-print("error", gradient(f)-df(a,b))
-print("error", Hessian(f)-hf(a,b))
+#approximation of gradient compared to the analytic gradient
+print("error gradient", gradient(f)-df(a,b))
+
+#approximation of hessian compared to the analytic hessian
+print("error hessian", Hessian(f)-hf(a,b))
 
 
-
+#compute the gradient and Hessian at the local extrema we found in Task 1. (function 2-1)
 x = 1
 y = 2
 def f1(x,y):
@@ -57,9 +52,8 @@ def hf1(x,y):
     return np.array([[fxx, fxy],[fxy, fyy]])
 
 
-print(df1(x,y))
-print(hf1(x,y))
-
+print("gradient function 2-1", df1(x,y)) # as expected since it is an extrema
+print("hessian function 2-1", hf1(x,y)) # as expected since the determinant is positive and f_xx is negative which says that the extrema is a maximum
 
 
 
