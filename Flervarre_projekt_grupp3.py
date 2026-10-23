@@ -26,6 +26,10 @@ def save_figure(fig, name):
 # tasks run directly. plt.show(block=True) at the end keeps all figures open.
 plt.ion()
 
+# Limit 1 is 0/0 on the line y = x, numpy gives nan there and those points
+# are left empty in the plots, so we turn off the warnings for this
+np.seterr(divide='ignore', invalid='ignore')
+
 # Print every line directly, also when the output is not shown in a terminal
 sys.stdout.reconfigure(line_buffering=True)
 
@@ -43,40 +47,58 @@ def print_header(text):
 
 print_header("Task 1: Limits and local extrema")
 print("Only figures in this task, the answers are in the comments")
-print("g(x,y) is plotted, uncomment another block in Task 1 to see the others")
-
-fig = plt.figure()
-ax = fig.add_subplot(projection='3d')
-fig2, ax2 = plt.subplots()
 
 # Task 1
 
-# To view a limit just uncomment it and then run the code
+# All limits and functions are plotted, each in its own figure
 # This was done to make it easier to read the result from the question asked
+
+# This plotting is universal for all limits and functions in task 1
+def plot_task1(name):
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    fig2, ax2 = plt.subplots()
+    ax.plot_surface(X,Y,z,alpha=0.5)
+    ax.set_title(title)
+    ax.set_xlabel("x")
+    ax.set_ylabel("y")
+    ax.set_zlabel(zlabel)
+    cs = ax2.contourf(X,Y,z,n)
+    ax2.set_title(contlabel)
+    ax2.set_xlabel("x")
+    ax2.set_ylabel("y")
+    cbar = fig2.colorbar(cs)
+    cs2 = ax2.contour(cs, levels = cs.levels[::2], colors='r')
+    cbar.add_lines(cs2)
+    cbar.ax.set_ylabel(zlabel)
+    save_figure(fig, "task1_" + name + "_surface")
+    save_figure(fig2, "task1_" + name + "_contour")
 
 # All of the limits in (1)
 
 # Limit 1, the limit is 1/2
-# x = y = np.linspace(0, 2, 1000)
-# X, Y = np.meshgrid(x,y)
-# z = (X**2-X*Y)/(X**2-Y**2)
-# n = 10
-# title = "Surface around the limit"
-# zlabel = "z"
-# contlabel = "Contour around the limit"
+x = y = np.linspace(0, 2, 1000)
+X, Y = np.meshgrid(x,y)
+z = (X**2-X*Y)/(X**2-Y**2)
+n = 10
+title = "Surface around limit 1"
+zlabel = "z"
+contlabel = "Contour around limit 1"
+plot_task1("limit1")
 
 # Limit 2, the limit does not exist
-# x = y = np.linspace(-1, 1, 1000)
-# X, Y = np.meshgrid(x,y)
-# z = (X**2+Y**2)/(X**2 + X*Y + Y**2)
-# n = 10
-# title = "Surface around the limit"
-# zlabel = "z"
-# contlabel = "Contour around the limit"
+x = y = np.linspace(-1, 1, 1000)
+X, Y = np.meshgrid(x,y)
+z = (X**2+Y**2)/(X**2 + X*Y + Y**2)
+n = 10
+title = "Surface around limit 2"
+zlabel = "z"
+contlabel = "Contour around limit 2"
+plot_task1("limit2")
 
 # Limit 3, the limit is around -0.168
-# x = np.linspace(-1,1,1000)
-# y = np.linspace(-2,0,1000)
+x = np.linspace(-1,1,1000)
+y = np.linspace(-2,0,1000)
 
 # x = np.linspace(-0.5,0.5,1000)
 # y = np.linspace(-1.5,-0.5,1000)
@@ -87,24 +109,26 @@ fig2, ax2 = plt.subplots()
 # Several linspaces are used to investigate an anomaly at the limit
 # caused by floating point errors
 
-# X, Y = np.meshgrid(x,y)
-# z = (np.sin(X + X*Y) - X - X*Y)/((X*(Y+1))**3)
-# n = 10
-# title = "Surface around the limit"
-# zlabel = "z"
-# contlabel = "Contour around the limit"
+X, Y = np.meshgrid(x,y)
+z = (np.sin(X + X*Y) - X - X*Y)/((X*(Y+1))**3)
+n = 10
+title = "Surface around limit 3"
+zlabel = "z"
+contlabel = "Contour around limit 3"
+plot_task1("limit3")
 
 # The functions in (2)
 
 #f(x,y) has local maxima of 4 at (1,2)
-# x = np.linspace(0, 2, 1000)
-# y = np.linspace(0, 4, 1000)
-# X, Y = np.meshgrid(x, y)
-# z = 8*X*Y - 4*Y*X**2 - 2*X*Y**2 + (X*Y)**2
-# n=10
-# title = "f(x,y) as a surface"
-# zlabel = "f(x,y)"
-# contlabel = "Contour of f(x,y) around local maxima"
+x = np.linspace(0, 2, 1000)
+y = np.linspace(0, 4, 1000)
+X, Y = np.meshgrid(x, y)
+z = 8*X*Y - 4*Y*X**2 - 2*X*Y**2 + (X*Y)**2
+n=10
+title = "f(x,y) as a surface"
+zlabel = "f(x,y)"
+contlabel = "Contour of f(x,y) around local maxima"
+plot_task1("f")
 
 # g(x,y) has the local maxima of 1.2 at both (0,1) and (0,-1)
 x = np.linspace(-2, 2, 1000)
@@ -115,21 +139,7 @@ n=10
 title = "g(x,y) as a surface"
 zlabel = "g(x,y)"
 contlabel = "Contour of g(x,y) around local maxima"
-
-# This plotting is universal for all limits and functions in task 1
-ax.plot_surface(X,Y,z,alpha=0.5)
-ax.set_title(title)
-ax.set_xlabel("x")
-ax.set_ylabel("y")
-ax.set_zlabel(zlabel)
-cs = ax2.contourf(X,Y,z,n)
-ax2.set_title(contlabel)
-ax2.set_xlabel("x")
-ax2.set_ylabel("y")
-cbar = fig2.colorbar(cs)
-cs2 = ax2.contour(cs, levels = cs.levels[::2], colors='r')
-cbar.add_lines(cs2)
-cbar.ax.set_ylabel(zlabel)
+plot_task1("g")
 
 
 plt.show()
@@ -199,10 +209,6 @@ print("hessian function 2-1", hf1(x,y)) # as expected since the determinant is p
 # =============================================================================
 
 print_header("Task 3: Implicit functions")
-
-# Save the two figures from Task 1 (they are already shown above)
-save_figure(fig, "task1_surface")
-save_figure(fig2, "task1_contour")
 
 #gradient() and Hessian() from Task 2 use the point (a,b), so to reuse them
 #at another point we first move (a,b) to that point
